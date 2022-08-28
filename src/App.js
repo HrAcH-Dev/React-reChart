@@ -1,25 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from 'react';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import axios from 'axios'
+
+import Covid from './Covid';
+
+import "./App.css"
+
+
+
+export default function App() {
+  const [data, setData] = useState([])
+
+    const getCovidData = async () => {
+        try {
+            const res = await fetch("https://data.covid19india.org/data.json")
+            const actualData = await res.json()
+            console.log(actualData.statewise[0])
+            setData(actualData.statewise[0])       
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+
+    useEffect(() => {
+        getCovidData()
+    }, [])
+
+    return (
+      <div className='App'>
+        <h1>Covid-19 API Chart</h1>
+
+        <Covid  arr={data}/>
+      </div>
+    );
 }
 
-export default App;
+
+
